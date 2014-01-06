@@ -5,25 +5,18 @@ import os
 from mod_python import apache
 
 def newSheet(hash, seed, key):
-#  key='ajgyepocnjiiwsdgriplazmnbkreqduyjfwqalkirhgpqamneiujfhgvyoebtgykebkd'
   for i in range(0,50):
     hash.update(seed+"1324-053dsfgkjbsdfnqr;sjdfg")
+    hash.update(os.urandom(20))
     seed=hash.digest()
     while (ord(seed[0])>221):  # 6*37 - to achieve constant probability of 0-36
       hash.update(seed+"kmbjkahsrtueggja'sfknbjfgkhsjsdlgfa'dbniugsdgnblkjsdg")
       seed=hash.digest()
     temp = ord(seed[0])%37
     key = key + chr(temp)
-    #if temp<26:
-    #  key=key+chr((ord(seed[0])%37)+65)
-    #elif temp<36:
-    #  key=key+chr((ord(seed[0])%37)+48-26)
-    #else:
-    #  key=key+'_'
 
   seed=hash.hexdigest().upper() 
 
-#soubor=open('ttt.txt','w')
 
   soubor=open("/tmp/"+seed,'w')
 
@@ -151,19 +144,13 @@ def index(req):
   pdfclass = text2pdf.PyText2Pdf()
   pdfclass.parse_args("/tmp/"+str(seed))
   pdfclass.convert()
-  #return "<html><body>Hi</body></html>"
-  #os.remove("/tmp/"+str(seed))
+  os.remove("/tmp/"+str(seed))
   lines = open("/tmp/"+str(seed)+".pdf", "rb").read()
   os.remove("/tmp/"+seed+".pdf")
-#  logf = open("/var/log/apache2/paper.log","a")
-#  logf.write(time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime()) +"\t"+str(seed)+"\n")
-#  logf.close()
   req.content_type = "application/pdf"
-#  req.content_length = str(len(lines))
   req.headers_out.add("Content-transfer-encoding", "binary")
   req.headers_out.add("Content-length", str(len(lines)))
   req.headers_out.add("Content-disposition", "attachment; filename=sheet"+seed+".pdf")
   req.send_http_header()
   req.write(lines)
-#  print header+lines
   return apache.OK 
