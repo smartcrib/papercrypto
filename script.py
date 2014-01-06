@@ -110,8 +110,11 @@ def newSheet(hash, seed, key):
       soubor.write('__|')
     soubor.write("\n")
    
+    if parts==0:
+      soubor.write("\nSend last 5 letters of the sheet code with the message. The sheet code is : "+seed[17:len(seed)-17]+"  "+"!"+seed[len(seed)-5:]+"!\n\n")
+    else:
+      soubor.write("\nCheck last 5 letters of the sheet code with your message. The sheet code is : "+seed[17:len(seed)-17]+"  "+"!"+seed[len(seed)-5:]+"!\n\n")
 
-    soubor.write("\nSend last 5 letters of the sheet code with the message. The sheet code is : "+seed[17:len(seed)-17]+"  "+"!"+seed[len(seed)-5:]+"!\n\n") 
     if parts==0:
       soubor.write("!"+"(0) DESTROY BEFORE ................ ")
       soubor.write("(1) ONLY FOR .....................!")
