@@ -5,12 +5,17 @@ import os
 from mod_python import apache
 
 def newSheet(hash, seed, key):
+  # please feel free to change the following two lines so they are unique 
+  # for your server
+  serversecret1 = "1324-053dsfgkjbsdfnqr;sjdfg"
+  serversecret2 = "kmbjkahsrtueggja'sfknbjfgkhsjsdlgfa'dbniugsdgnblkjsdg"
   for i in range(0,50):
-    hash.update(seed+"1324-053dsfgkjbsdfnqr;sjdfg")
-    hash.update(os.urandom(20))
+    hash.update(seed+serversecret1)
+    hash.update(os.urandom(5)) # we are looking for 5 random bits, 
+                               # and we take 5*8 bits from urandom 
     seed=hash.digest()
     while (ord(seed[0])>221):  # 6*37 - to achieve constant probability of 0-36
-      hash.update(seed+"kmbjkahsrtueggja'sfknbjfgkhsjsdlgfa'dbniugsdgnblkjsdg")
+      hash.update(seed+serversecret2)
       seed=hash.digest()
     temp = ord(seed[0])%37
     key = key + chr(temp)
